@@ -13,26 +13,16 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 // import react components
-import Todo from "./Todo";
-
-
-//import react hooks and libraries
 import { v4 as uuid } from 'uuid';
+import Todo from "./Todo";
+import { TodoContext } from "./context/todosContext";
+import { useContext } from "react";
+import { useState } from "react";
 
 
 
-
-
-const tasks = [
-  { id: uuid(), title: "تنظيف", details: "تنظيف الغرفة وترتيبها", isCompleted: false },
-  { id: uuid(), title: "مذاكرة", details: "مذاكرة درس البرمجة الكائنية OOP", isCompleted: true },
-  { id: uuid(), title: "مشروع", details: "إكمال مشروع موقع السفر", isCompleted: false },
-  { id: uuid(), title: "تسوق", details: "شراء خضار وفواكه من السوق", isCompleted: true },
-  { id: uuid(), title: "مراجعة", details: "مراجعة ملاحظات المحاضرة الأخيرة", isCompleted: false }
-];
 
 export default function Todolist() {
-
   return (
 
       <Container maxWidth="sm">
@@ -44,9 +34,37 @@ export default function Todolist() {
 }
 
 function Task(){
-    const taskjsx = tasks.map((t)=>{
-    return  <Todo key={t.id} title={t.title} details={t.details} isCompleted={t.isCompleted}/>
-  })
+  const { todos,setTodos} = useContext(TodoContext);
+
+  function handleCheckClick(id){
+    const checkedTodo = todos.map((t)=>{
+      if(t.id === id ){
+      t.isCompleted = !t.isCompleted
+        
+      }
+      return t
+    })
+    setTodos(checkedTodo)
+  }
+
+    const [ TitleInput,setTitleInput ] = useState("");
+
+    const taskjsx = todos.map((t)=>{
+    return  <Todo key={t.id} todo={t} handleCheck={handleCheckClick}
+      />
+  });
+
+  function handleAddTask(){
+    const newtodo = {
+      id: uuid(),
+      title: TitleInput,
+      details:"",
+      isCompleted:"false"
+    }
+
+    setTodos([...todos,newtodo]);
+    setTitleInput("")
+  }
   return(
     <>
       <Card sx={{ minWidth: 275 }}>
@@ -81,15 +99,16 @@ function Task(){
 
 
         <CardContent>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} style={{display:"flex",justifyContent:"center",flexDirection: "row"}}>
+              <p></p>
                 <Grid size={8} className="textGrid" style={{display:"flex",justifyContent:"left"}} >
-                <TextField id="outlined-basic" style={{fontSize:"10px",width:"400px"}} label="المهمة" variant="outlined" />
-
+                <TextField value={TitleInput} onChange={(e)=>{setTitleInput(e.target.value)}} id="outlined-basic" style={{fontSize:"10px",width:"400px"}} label="المهمة" variant="outlined" />
                 </Grid>
+
                 <Grid  size={4} style={{display:"flex",justifyContent:"center"}}>
-                <Button variant="contained" style={{width:"160px",fontSize:"20px",background:"#4264a0ff"}}>اضافة المهمة</Button>
-
+                <Button onClick={()=>{handleAddTask();}} variant="contained" style={{width:"160px",fontSize:"20px",background:"#4264a0ff"}}>اضافة المهمة</Button>
                 </Grid>
+
             </Grid>
       </CardContent>
         <CardActions>
