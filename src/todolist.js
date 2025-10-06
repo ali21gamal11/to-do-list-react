@@ -36,23 +36,14 @@ export default function Todolist() {
 function Task(){
   const { todos,setTodos} = useContext(TodoContext);
 
-  function handleCheckClick(id){
-    const checkedTodo = todos.map((t)=>{
-      if(t.id === id ){
-      t.isCompleted = !t.isCompleted
-        
-      }
-      return t
-    })
-    setTodos(checkedTodo)
-  }
+
 
     const [ TitleInput,setTitleInput ] = useState("");
 
-    const taskjsx = todos.map((t)=>{
-    return  <Todo key={t.id} todo={t} handleCheck={handleCheckClick}
-      />
-  });
+  //   const taskjsx = todos.map((t)=>{
+  //   return  <Todo key={t.id} todo={t}
+  //     />
+  // });
 
   function handleAddTask(){
     const newtodo = {
@@ -92,7 +83,7 @@ function Task(){
 
 
           {/*tasks*/}
-          {taskjsx}
+          <Todo/>
           {/*tasks*/}
         </CardContent>
 

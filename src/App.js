@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <div className="Todolistcon">
-        <TodoContext.Provider value={{todos,setTodos}}>
+        <TodoContext.Provider value={{todos:todos,setTodos:setTodos}}>
         <Todolist />
         </TodoContext.Provider>
       </div>
